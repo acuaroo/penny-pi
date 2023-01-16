@@ -58,3 +58,8 @@ def go_backwards():
     GPIO.output(FRONT_RIGHT, GPIO.LOW)
     GPIO.output(REAR_RIGHT, GPIO.HIGH)
 
+def stop():
+    GPIO.output(FRONT_LEFT, GPIO.LOW)
+    GPIO.output(REAR_LEFT, GPIO.LOW)
+    GPIO.output(FRONT_RIGHT, GPIO.LOW)
+    GPIO.output(REAR_RIGHT, GPIO.LOW)
