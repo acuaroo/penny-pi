@@ -1,5 +1,7 @@
 from picamera import PiCamera 
 from time import sleep
+from multiprocessing import Process
+
 import bluetooth
 import controller
 
@@ -63,7 +65,8 @@ while on:
     elif b'S' in data:
         controller.stop()
         current_motion = ''
-    elif b'W' in data:
+
+    if b'W' in data:
         controller.stop()
         on = False
         recording = False
@@ -107,10 +110,11 @@ while on:
         recording = False
 
     if recording:
-        camera_step(current_motion)
+        #prevent any delay from screwing up the driving
+        Process(target=camera_step, args=(current_motion)).start()
 
 
 client_socket.close()
 server_socket.close()
 
-print("python server")
+print("python server closing")
