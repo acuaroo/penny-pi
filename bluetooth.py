@@ -8,7 +8,7 @@ PORT = 1
 DEFAULT_SPEED = 40
 
 camera = PiCamera()
-camera.resolution = CAMERA_SIZE
+camera.resolution = (CAMERA_SIZE, CAMERA_SIZE)
 
 server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 server_socket.bind(("", PORT))
