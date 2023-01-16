@@ -28,7 +28,7 @@ p_enb.start(DEFAULT_SPEED)
 data = ''
 tick = 0
 
-on = False
+on = True
 recording = False
 
 def camera_step(current_motion):
