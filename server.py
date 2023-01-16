@@ -111,7 +111,7 @@ while on:
 
     if recording:
         #prevent any delay from screwing up the driving
-        Process(target=camera_step, args=(current_motion)).start()
+        Process(target=camera_step, args=(current_motion,)).start()
 
 
 client_socket.close()
