@@ -25,6 +25,8 @@ p_ena, p_enb = controller.gpio_init()
 p_ena.start(DEFAULT_SPEED)
 p_enb.start(DEFAULT_SPEED)
 
+current_speed = DEFAULT_SPEED
+
 data = ''
 tick = 0
 
@@ -43,15 +45,19 @@ while on:
     current_motion = ''
 
     if b'L' in data:
+        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_left()
         current_motion = 'L'
     elif b'R' in data:
+        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_right()
         current_motion = 'R'
     elif b'F' in data:
+        controller.change_speed(current_speed, p_ena, p_enb)
         controller.go_forwards()
         current_motion = 'F'
     elif b'B' in data:
+        controller.change_speed(current_speed, p_ena, p_enb)
         controller.go_backwards()
         current_motion = ''
     elif b'S' in data:
@@ -64,24 +70,34 @@ while on:
         break
     
     if b'1' in data:
+        current_speed = DEFAULT_SPEED+(6*1)
         controller.change_speed(DEFAULT_SPEED+(6*1), p_ena, p_enb)
     elif b'2' in data:
+        current_speed = DEFAULT_SPEED+(6*2)
         controller.change_speed(DEFAULT_SPEED+(6*2), p_ena, p_enb)
     elif b'3' in data:
+        current_speed = DEFAULT_SPEED+(6*3)
         controller.change_speed(DEFAULT_SPEED+(6*3), p_ena, p_enb)
     elif b'4' in data:
+        current_speed = DEFAULT_SPEED+(6*4)
         controller.change_speed(DEFAULT_SPEED+(6*4), p_ena, p_enb)
     elif b'5' in data:
+        current_speed = DEFAULT_SPEED+(6*5)
         controller.change_speed(DEFAULT_SPEED+(6*5), p_ena, p_enb)
     elif b'6' in data:
+        current_speed = DEFAULT_SPEED+(6*6)
         controller.change_speed(DEFAULT_SPEED+(6*6), p_ena, p_enb)
     elif b'7' in data:
+        current_speed = DEFAULT_SPEED+(6*7)
         controller.change_speed(DEFAULT_SPEED+(6*7), p_ena, p_enb)
     elif b'8' in data:
+        current_speed = DEFAULT_SPEED+(6*8)
         controller.change_speed(DEFAULT_SPEED+(6*8), p_ena, p_enb)
     elif b'9' in data:
+        current_speed = DEFAULT_SPEED+(6*9)
         controller.change_speed(DEFAULT_SPEED+(6*9), p_ena, p_enb)
     elif b'q' in data:
+        current_speed = DEFAULT_SPEED+(6*10)
         controller.change_speed(DEFAULT_SPEED+(6*10), p_ena, p_enb)
 
 
