@@ -40,7 +40,7 @@ def camera_step(current_motion):
     global tick
 
     if recording and current_motion != '':
-        camera.capture('data/'+current_motion+'/'+str(tick)+'.png')
+        camera.capture('penny-pi/data/'+current_motion+'/'+str(tick)+'.png')
 
 while on:
     tick += 1
