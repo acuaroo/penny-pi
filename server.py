@@ -110,6 +110,7 @@ while on:
     
     if 'L' in current_motion:
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
+        controller.turn_left()
     if 'R' in current_motion:
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_right()
