@@ -11,6 +11,7 @@ DEFAULT_SPEED = 40
 
 camera = PiCamera()
 camera.resolution = (CAMERA_SIZE, CAMERA_SIZE)
+camera.rotation = 90
 
 server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 server_socket.bind(("", PORT))
@@ -47,16 +48,10 @@ while on:
     current_motion = ''
 
     if b'L' in data:
-        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
-        controller.turn_left()
         current_motion = 'L'
     elif b'R' in data:
-        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
-        controller.turn_right()
         current_motion = 'R'
     elif b'F' in data:
-        controller.change_speed(current_speed, p_ena, p_enb)
-        controller.go_forwards()
         current_motion = 'F'
     elif b'B' in data:
         controller.change_speed(current_speed, p_ena, p_enb)
@@ -65,7 +60,7 @@ while on:
     elif b'S' in data:
         controller.stop()
         current_motion = ''
-
+        
     if b'W' in data:
         controller.stop()
         on = False
@@ -112,6 +107,15 @@ while on:
     if recording:
         #prevent any delay from screwing up the driving
         Process(target=camera_step, args=(current_motion,)).start()
+    
+    if 'L' in current_motion:
+        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
+    if 'R' in current_motion:
+        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
+        controller.turn_right()
+    if 'F' in current_motion:
+        controller.change_speed(current_speed, p_ena, p_enb)
+        controller.go_forwards()
 
 
 client_socket.close()
