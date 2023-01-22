@@ -108,13 +108,13 @@ while on:
         #prevent any delay from screwing up the driving
         Process(target=camera_step, args=(current_motion,)).start()
     
-    if 'L' in current_motion:
+    if current_motion == 'L':
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_left()
-    if 'R' in current_motion:
+    if current_motion == 'R':
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_right()
-    if 'F' in current_motion:
+    if current_motion == 'F':
         controller.change_speed(current_speed, p_ena, p_enb)
         controller.go_forwards()
 
