@@ -47,9 +47,9 @@ while on:
     data = client_socket.recv(1024)
     current_motion = ''
 
-    if b'L' in data:
+    if b'L' in data or b'G' in data:
         current_motion = 'L'
-    elif b'R' in data:
+    elif b'R' in data or b'I' in data:
         current_motion = 'R'
     elif b'F' in data:
         current_motion = 'F'
