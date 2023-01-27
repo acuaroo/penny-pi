@@ -11,7 +11,7 @@ DEFAULT_SPEED = 40
 
 camera = PiCamera()
 camera.resolution = (CAMERA_SIZE, CAMERA_SIZE)
-camera.rotation = 90
+camera.rotation = -90
 
 server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 server_socket.bind(("", PORT))
@@ -110,9 +110,11 @@ while on:
         #Process(target=camera_step, args=(current_motion,)).start()
     
     if current_motion == 'L':
+        camera_step(current_motion)
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_left()
     if current_motion == 'R':
+        camera_step(current_motion)
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_right()
     if current_motion == 'F':
