@@ -104,9 +104,10 @@ while on:
     elif b'u' in data:
         recording = False
 
-    if recording:
+    if recording and tick % 10 == 0:
         #prevent any delay from screwing up the driving
-        Process(target=camera_step, args=(current_motion,)).start()
+        camera_step(current_motion)
+        #Process(target=camera_step, args=(current_motion,)).start()
     
     if current_motion == 'L':
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
