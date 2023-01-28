@@ -1,9 +1,10 @@
 from picamera import PiCamera 
 from time import sleep
 from multiprocessing import Process
-
+import os
 import bluetooth
 import controller
+import numpy as np
 
 CAMERA_SIZE = 128
 PORT = 1
@@ -32,6 +33,8 @@ current_speed = DEFAULT_SPEED
 
 data = ''
 tick = 0
+command_array = []
+tick_array = []
 
 on = True
 recording = False
@@ -40,7 +43,9 @@ def camera_step(current_motion):
     global tick
 
     if recording and current_motion != '':
-        camera.capture('penny-pi/data/'+current_motion+'/'+str(tick)+'.png')
+        tick_array.append(tick)
+        command_array.append(current_motion)
+        camera.capture('penny-pi/data/'+str(tick)+'.png')
 
 while on:
     tick += 1
@@ -98,31 +103,41 @@ while on:
         current_speed = DEFAULT_SPEED+(6*10)
         controller.change_speed(DEFAULT_SPEED+(6*10), p_ena, p_enb)
 
-
+    wait_time = 0.5
     if b'U' in data:
         recording = True
     elif b'u' in data:
         recording = False
 
-    if recording and tick % 10 == 0:
-        #prevent any delay from screwing up the driving
-        camera_step(current_motion)
-        #Process(target=camera_step, args=(current_motion,)).start()
-    
+#    if recording and tick % 10 == 0:
+#        #prevent any delay from screwing up the driving
+#        
+#        #Process(target=camera_step, args=(current_motion,)).start()
+#    
     if current_motion == 'L':
-        camera_step(current_motion)
+        #camera_step(current_motion)
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_left()
+        wait_time = 0.25
     if current_motion == 'R':
-        camera_step(current_motion)
+        #camera_step(current_motion)
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_right()
+        wait_time = 0.25
     if current_motion == 'F':
         controller.change_speed(current_speed, p_ena, p_enb)
         controller.go_forwards()
+        wait_time = 0.5
 
+    sleep(wait_time)
+    controller.stop()
+
+    if recording:
+        camera_step(current_motion)
 
 client_socket.close()
 server_socket.close()
+
+np.savez('penny-pi/data.npz', commands=command_array, ticks=tick_array)
 
 print("python server closing")
