@@ -131,7 +131,7 @@ while on:
 
     sleep(wait_time)
     controller.stop()
-
+    #new "stutter" recording system
     if recording:
         camera_step(current_motion)
 
