@@ -118,12 +118,12 @@ while on:
         #camera_step(current_motion)
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_left()
-        wait_time = 0.25
+        wait_time = 0.1
     if current_motion == 'R':
         #camera_step(current_motion)
         controller.change_speed(current_speed-(6*2), p_ena, p_enb)
         controller.turn_right()
-        wait_time = 0.25
+        wait_time = 0.1
     if current_motion == 'F':
         controller.change_speed(current_speed, p_ena, p_enb)
         controller.go_forwards()
