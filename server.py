@@ -153,6 +153,6 @@ while on:
 client_socket.close()
 server_socket.close()
 
-np.savez('penny-pi/data_'+str(session_id)+'.npz', commands=command_array, ticks=tick_array, speed=speed_array, step_interval=step_array)
+np.savez('penny-pi/data/'+str(session_id)+'/data.npz', commands=command_array, ticks=tick_array, speed=speed_array, step_interval=step_array)
 
 print("python server closing")
