@@ -5,6 +5,7 @@ import os
 import bluetooth
 import controller
 import numpy as np
+from datetime import datetime
 
 CAMERA_SIZE = 128
 PORT = 1
@@ -33,19 +34,33 @@ current_speed = DEFAULT_SPEED
 
 data = ''
 tick = 0
+wait_time = 0.5
+
 command_array = []
 tick_array = []
+speed_array = []
+step_array = []
 
 on = True
 recording = False
+session_id = datetime.now()
 
 def camera_step(current_motion):
     global tick
+    global current_speed 
+    global wait_time
 
     if recording and current_motion != '':
         tick_array.append(tick)
         command_array.append(current_motion)
-        camera.capture('penny-pi/data/'+str(tick)+'.png')
+        speed_array.append(current_speed)
+        step_array.append(wait_time)
+        camera.capture('penny-pi/data/'+str(session_id)+'/'+str(tick)+'.png')
+
+
+os.system("cd penny-pi/data | mkdir "+str(session_id))
+
+print("session id created ("+str(session_id)+")")
 
 while on:
     tick += 1
@@ -103,7 +118,7 @@ while on:
         current_speed = DEFAULT_SPEED+(6*10)
         controller.change_speed(DEFAULT_SPEED+(6*10), p_ena, p_enb)
 
-    wait_time = 0.5
+    
     if b'U' in data:
         recording = True
     elif b'u' in data:
@@ -138,6 +153,6 @@ while on:
 client_socket.close()
 server_socket.close()
 
-np.savez('penny-pi/data.npz', commands=command_array, ticks=tick_array)
+np.savez('penny-pi/data_'+str(session_id)+'.npz', commands=command_array, ticks=tick_array, speed=speed_array, step_interval=step_array)
 
 print("python server closing")
