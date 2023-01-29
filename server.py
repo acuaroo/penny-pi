@@ -43,7 +43,7 @@ step_array = []
 
 on = True
 recording = False
-session_id = datetime.now()
+session_id = datetime.now().strftime("%Y%m%d%H%M%S")
 
 def camera_step(current_motion):
     global tick
@@ -58,7 +58,7 @@ def camera_step(current_motion):
         camera.capture('penny-pi/data/'+str(session_id)+'/'+str(tick)+'.png')
 
 
-os.system("cd penny-pi/data | mkdir "+str(session_id))
+os.system("mkdir penny-pi/data/"+str(session_id))
 
 print("session id created ("+str(session_id)+")")
 
