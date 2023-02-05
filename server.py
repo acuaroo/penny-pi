@@ -1,15 +1,23 @@
 from picamera import PiCamera 
+from picamera.array import PiRGBArray
 from time import sleep
 from multiprocessing import Process
 import os
 import bluetooth
 import controller
 import numpy as np
+import tflite_runtime.interpreter as tflite
 from datetime import datetime
 
 CAMERA_SIZE = 128
 PORT = 1
 DEFAULT_SPEED = 40
+
+interpreter = tflite.Interpreter(model_math='23-2-4-ta79.tflite')
+interpreter.allocate_tensors()
+
+output = interpreter.get_output_details()[0]
+input = interpreter.get_input_details()[0]]
 
 camera = PiCamera()
 camera.resolution = (CAMERA_SIZE, CAMERA_SIZE)
@@ -42,6 +50,7 @@ speed_array = []
 step_array = []
 
 on = True
+self_driving = True
 recording = False
 session_id = datetime.now().strftime("%Y%m%d%H%M%S")
 
@@ -61,6 +70,32 @@ def camera_step(current_motion):
 os.system("mkdir penny-pi/data/"+str(session_id))
 
 print("session id created ("+str(session_id)+")")
+
+if self_driving:
+    on = False
+    rawCapture = PiRGBArray(camera, size=(CAMERA_SIZE, CAMERA_SIZE))
+    camera.capture(rawCapture format="rgb")
+    img_array = rawCapture.array
+    img_array = img_array.reshape(1, CAMERA_SIZE, CAMERA_SIZE, 3)
+    img_array = np.float32(img_array)
+    #img_array = img_array / 255
+    
+    interpreter.set_tensor(input['index'], img_array)
+    predictions = interpreter.get_tensor(output['index'])
+    np.set_printoptions(precision=2, suppress=True)
+    print(predictions))
+
+    f = interpreter.get_tensor(output['index'])[0][0]
+    r = interpreter.get_tensor(output['index'])[0][1]
+    l = interpreter.get_tensor(output['index'])[0][2]
+    if f > r and f > l:
+        current_motion = 'F'
+    elif r > f and r > l:
+        current_motion = 'R'
+    elif l > f and l > r:
+        current_motion = 'L'
+
+
 
 while on:
     tick += 1
