@@ -11,13 +11,13 @@ from datetime import datetime
 
 CAMERA_SIZE = 128
 PORT = 1
-DEFAULT_SPEED = 40
+DEFAULT_SPEED = 75
 
-interpreter = tflite.Interpreter(model_math='23-2-4-ta79.tflite')
+interpreter = tflite.Interpreter(model_path='penny-pi/car-23-2-4-ta79.tflite')
 interpreter.allocate_tensors()
 
 output = interpreter.get_output_details()[0]
-input = interpreter.get_input_details()[0]]
+input = interpreter.get_input_details()[0]
 
 camera = PiCamera()
 camera.resolution = (CAMERA_SIZE, CAMERA_SIZE)
@@ -71,23 +71,32 @@ os.system("mkdir penny-pi/data/"+str(session_id))
 
 print("session id created ("+str(session_id)+")")
 
-if self_driving:
+
+controller.change_speed(current_speed, p_ena, p_enb)
+
+while self_driving:
     on = False
+    current_motion = ''
     rawCapture = PiRGBArray(camera, size=(CAMERA_SIZE, CAMERA_SIZE))
-    camera.capture(rawCapture format="rgb")
+    camera.capture(rawCapture, format="rgb")
+
     img_array = rawCapture.array
     img_array = img_array.reshape(1, CAMERA_SIZE, CAMERA_SIZE, 3)
     img_array = np.float32(img_array)
     #img_array = img_array / 255
     
     interpreter.set_tensor(input['index'], img_array)
+    interpreter.invoke()
+
+
     predictions = interpreter.get_tensor(output['index'])
-    np.set_printoptions(precision=2, suppress=True)
-    print(predictions))
+    #np.set_printoptions(precision=2, suppress=True)
+    print(predictions)
 
     f = interpreter.get_tensor(output['index'])[0][0]
-    r = interpreter.get_tensor(output['index'])[0][1]
-    l = interpreter.get_tensor(output['index'])[0][2]
+    l = interpreter.get_tensor(output['index'])[0][1]
+    r = interpreter.get_tensor(output['index'])[0][2]
+
     if f > r and f > l:
         current_motion = 'F'
     elif r > f and r > l:
@@ -96,12 +105,32 @@ if self_driving:
         current_motion = 'L'
 
 
+    wait_time = 0.5
+
+    if current_motion == 'L':
+        #camera_step(current_motion)
+        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
+        controller.turn_left()
+        wait_time = 0.1
+    if current_motion == 'R':
+        #camera_step(current_motion)
+        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
+        controller.turn_right()
+        wait_time = 0.1
+    if current_motion == 'F':
+        controller.change_speed(current_speed, p_ena, p_enb)
+        controller.go_forwards()
+        wait_time = 0.5
+
+    sleep(wait_time)
+    controller.stop()
+
 
 while on:
     tick += 1
     data = client_socket.recv(1024)
     current_motion = ''
-
+    
     if b'L' in data or b'G' in data:
         current_motion = 'L'
     elif b'R' in data or b'I' in data:
