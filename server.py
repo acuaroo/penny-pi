@@ -48,6 +48,7 @@ command_array = []
 tick_array = []
 speed_array = []
 step_array = []
+predictions_array = []
 
 on = True
 self_driving = False
@@ -109,6 +110,8 @@ while on:
         predictions = interpreter.get_tensor(output['index'])
         #np.set_printoptions(precision=2, suppress=True)
         print(predictions)
+        
+        predictions_array.append(predictions)
 
         f = interpreter.get_tensor(output['index'])[0][0]
         l = interpreter.get_tensor(output['index'])[0][1]
@@ -120,6 +123,7 @@ while on:
             current_motion = 'R'
         elif l > f and l > r:
             current_motion = 'L'
+
     else:
         if b'L' in data or b'G' in data:
             current_motion = 'L'
