@@ -75,6 +75,24 @@ controller.change_speed(current_speed, p_ena, p_enb)
     
 while on:
     current_motion = ''
+    tick += 1
+    data = client_socket.recv(1024)
+    wait_time = 0.5
+
+    if b'W' in data:
+        controller.stop()
+        on = False
+        recording = False
+        break
+
+    if b'U' in data:
+        recording = True
+    elif b'u' in data:
+        recording = False
+    elif b'X' in data:
+        self_driving = True
+    elif b'x' in data:
+        self_driving = False
 
     if self_driving:
         rawCapture = PiRGBArray(camera, size=(CAMERA_SIZE, CAMERA_SIZE))
@@ -103,9 +121,6 @@ while on:
         elif l > f and l > r:
             current_motion = 'L'
     else:
-        tick += 1
-        data = client_socket.recv(1024)
-        
         if b'L' in data or b'G' in data:
             current_motion = 'L'
         elif b'R' in data or b'I' in data:
@@ -120,12 +135,6 @@ while on:
             controller.stop()
             current_motion = ''
             
-        if b'W' in data:
-            controller.stop()
-            on = False
-            recording = False
-            break
-        
         if b'1' in data:
             current_speed = DEFAULT_SPEED+(6*1)
             controller.change_speed(DEFAULT_SPEED+(6*1), p_ena, p_enb)
@@ -156,18 +165,6 @@ while on:
         elif b'q' in data:
             current_speed = DEFAULT_SPEED+(6*10)
             controller.change_speed(DEFAULT_SPEED+(6*10), p_ena, p_enb)
-  
-        if b'U' in data:
-            recording = True
-        elif b'u' in data:
-            recording = False
-        elif b'X' in data:
-            self_driving = True
-        elif b'x' in data:
-            self_driving = False
-        #new "stutter" recording system
-       
-    wait_time = 0.5
 
     if current_motion == 'L':
         #camera_step(current_motion)
