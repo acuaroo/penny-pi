@@ -123,6 +123,13 @@ while on:
             current_motion = 'R'
         elif l > f and l > r:
             current_motion = 'L'
+        
+        if len(predictions_array) >= 10:
+            last_ten = test_list[-10:]
+
+            if last_ten.count('R') == 10 or last_ten.count('L') == 10:
+                current_motion = 'F'
+            
 
     else:
         if b'L' in data or b'G' in data:
