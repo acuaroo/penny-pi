@@ -157,7 +157,7 @@ while on:
 
         if len(predictions_array) >= 5:
             last_five = predictions_array[(len(predictions_array) - 5):]
-
+            print(last_five)
             if last_five.count('R') == 5 or last_five.count('L') == 5:
                 current_motion = 'F'
             
