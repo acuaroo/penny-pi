@@ -160,7 +160,7 @@ while on:
             print(last_five)
             if last_five.count('R') == 5 or last_five.count('L') == 5:
                 current_motion = 'F'
-		predictions_array.append(current_motion)
+                predictions_array.append(current_motion)
             
     else:
         if b'L' in data or b'G' in data:
