@@ -142,8 +142,6 @@ while on:
         #np.set_printoptions(precision=2, suppress=True)
         print(predictions)
         
-        predictions_array.append(predictions)
-
         f = interpreter.get_tensor(output['index'])[0][0]
         l = interpreter.get_tensor(output['index'])[0][1]
         r = interpreter.get_tensor(output['index'])[0][2]
@@ -154,7 +152,9 @@ while on:
             current_motion = 'R'
         elif l > f and l > r:
             current_motion = 'L'
-        
+
+        predictions_array.append(current_motion)
+
         if len(predictions_array) >= 5:
             last_five = predictions_array[-5:]
 
