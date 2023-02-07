@@ -86,6 +86,37 @@ while on:
         recording = False
         break
 
+    if b'1' in data:
+        current_speed = DEFAULT_SPEED+(6*1)
+        controller.change_speed(DEFAULT_SPEED+(6*1), p_ena, p_enb)
+    elif b'2' in data:
+        current_speed = DEFAULT_SPEED+(6*2)
+        controller.change_speed(DEFAULT_SPEED+(6*2), p_ena, p_enb)
+    elif b'3' in data:
+        current_speed = DEFAULT_SPEED+(6*3)
+        controller.change_speed(DEFAULT_SPEED+(6*3), p_ena, p_enb)
+    elif b'4' in data:
+        current_speed = DEFAULT_SPEED+(6*4)
+        controller.change_speed(DEFAULT_SPEED+(6*4), p_ena, p_enb)
+    elif b'5' in data:
+        current_speed = DEFAULT_SPEED+(6*5)
+        controller.change_speed(DEFAULT_SPEED+(6*5), p_ena, p_enb)
+    elif b'6' in data:
+        current_speed = DEFAULT_SPEED+(6*6)
+        controller.change_speed(DEFAULT_SPEED+(6*6), p_ena, p_enb)
+    elif b'7' in data:
+        current_speed = DEFAULT_SPEED+(6*7)
+        controller.change_speed(DEFAULT_SPEED+(6*7), p_ena, p_enb)
+    elif b'8' in data:
+        current_speed = DEFAULT_SPEED+(6*8)
+        controller.change_speed(DEFAULT_SPEED+(6*8), p_ena, p_enb)
+    elif b'9' in data:
+        current_speed = DEFAULT_SPEED+(6*9)
+        controller.change_speed(DEFAULT_SPEED+(6*9), p_ena, p_enb)
+    elif b'q' in data:
+        current_speed = DEFAULT_SPEED+(6*10)
+        controller.change_speed(DEFAULT_SPEED+(6*10), p_ena, p_enb)
+
     if b'U' in data:
         recording = True
     elif b'u' in data:
@@ -124,13 +155,12 @@ while on:
         elif l > f and l > r:
             current_motion = 'L'
         
-        if len(predictions_array) >= 10:
-            last_ten = test_list[-10:]
+        if len(predictions_array) >= 5:
+            last_five = predictions_array[-5:]
 
-            if last_ten.count('R') == 10 or last_ten.count('L') == 10:
+            if last_five.count('R') == 5 or last_five.count('L') == 5:
                 current_motion = 'F'
             
-
     else:
         if b'L' in data or b'G' in data:
             current_motion = 'L'
@@ -146,36 +176,7 @@ while on:
             controller.stop()
             current_motion = ''
             
-        if b'1' in data:
-            current_speed = DEFAULT_SPEED+(6*1)
-            controller.change_speed(DEFAULT_SPEED+(6*1), p_ena, p_enb)
-        elif b'2' in data:
-            current_speed = DEFAULT_SPEED+(6*2)
-            controller.change_speed(DEFAULT_SPEED+(6*2), p_ena, p_enb)
-        elif b'3' in data:
-            current_speed = DEFAULT_SPEED+(6*3)
-            controller.change_speed(DEFAULT_SPEED+(6*3), p_ena, p_enb)
-        elif b'4' in data:
-            current_speed = DEFAULT_SPEED+(6*4)
-            controller.change_speed(DEFAULT_SPEED+(6*4), p_ena, p_enb)
-        elif b'5' in data:
-            current_speed = DEFAULT_SPEED+(6*5)
-            controller.change_speed(DEFAULT_SPEED+(6*5), p_ena, p_enb)
-        elif b'6' in data:
-            current_speed = DEFAULT_SPEED+(6*6)
-            controller.change_speed(DEFAULT_SPEED+(6*6), p_ena, p_enb)
-        elif b'7' in data:
-            current_speed = DEFAULT_SPEED+(6*7)
-            controller.change_speed(DEFAULT_SPEED+(6*7), p_ena, p_enb)
-        elif b'8' in data:
-            current_speed = DEFAULT_SPEED+(6*8)
-            controller.change_speed(DEFAULT_SPEED+(6*8), p_ena, p_enb)
-        elif b'9' in data:
-            current_speed = DEFAULT_SPEED+(6*9)
-            controller.change_speed(DEFAULT_SPEED+(6*9), p_ena, p_enb)
-        elif b'q' in data:
-            current_speed = DEFAULT_SPEED+(6*10)
-            controller.change_speed(DEFAULT_SPEED+(6*10), p_ena, p_enb)
+
 
     if current_motion == 'L':
         #camera_step(current_motion)
