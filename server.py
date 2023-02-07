@@ -11,7 +11,7 @@ from datetime import datetime
 
 CAMERA_SIZE = 128
 PORT = 1
-DEFAULT_SPEED = 75
+DEFAULT_SPEED = 40;
 
 interpreter = tflite.Interpreter(model_path='penny-pi/machine-learning/car-23-2-4-ta79.tflite')
 interpreter.allocate_tensors()
