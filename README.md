@@ -1,8 +1,17 @@
 # penny-pi
 
+![penny-pi](https://user-images.githubusercontent.com/67112172/217572579-81235e0d-f52b-4efd-bf32-8ef7e7f4e625.jpg)
+
 > *a small self driving robot that loves our cat named penny :)*
 
+
 ---
+
+## in action
+
+![ezgif-2-fdb6f77a38](https://user-images.githubusercontent.com/67112172/217573051-9ca4617f-6fbb-4e24-9cd1-37897fb8c8c2.gif)
+
+
 
 ## current features
 
@@ -51,3 +60,5 @@ the next part was pretty basic, you can find some of our models in `/machine-lea
 [0, 0, 1] <- go right
 ...
 ```
+
+
