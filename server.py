@@ -50,6 +50,7 @@ speed_array = []
 step_array = []
 predictions_array = []
 
+was_recording = False
 on = True
 self_driving = False
 recording = False
@@ -119,6 +120,7 @@ while on:
 
     if b'U' in data:
         recording = True
+        was_recording = True
     elif b'u' in data:
         recording = False
     elif b'X' in data:
@@ -201,10 +203,12 @@ while on:
     if recording and not self_driving:
         camera_step(current_motion)
 
+#print(recording)
 client_socket.close()
 server_socket.close()
-
-if recording:
+#print(recording)
+if was_recording:
+    print("saving")
     np.savez('penny-pi/tag-data/'+str(session_id)+'/data.npz', commands=command_array, ticks=tick_array, speed=speed_array, step_interval=step_array)
 
 print("python server closing")
