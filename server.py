@@ -50,10 +50,11 @@ speed_array = []
 step_array = []
 predictions_array = []
 
+was_recording = False
 on = True
 self_driving = False
 recording = False
-session_id = datetime.now().strftime("%Y%m%d%H%M%S")
+session_id = "TAG_"+datetime.now().strftime("%Y%m%d%H%M%S")
 
 def camera_step(current_motion):
     global tick
@@ -65,10 +66,10 @@ def camera_step(current_motion):
         command_array.append(current_motion)
         speed_array.append(current_speed)
         step_array.append(wait_time)
-        camera.capture('penny-pi/data/'+str(session_id)+'/'+str(tick)+'.png')
+        camera.capture('penny-pi/tag-data/'+str(session_id)+'/'+str(tick)+'.png')
 
 
-os.system("mkdir penny-pi/data/"+str(session_id))
+os.system("mkdir penny-pi/tag-data/"+str(session_id))
 
 print("session id created ("+str(session_id)+")")
 
@@ -119,6 +120,7 @@ while on:
 
     if b'U' in data:
         recording = True
+        was_recording = True
     elif b'u' in data:
         recording = False
     elif b'X' in data:
@@ -161,7 +163,7 @@ while on:
             print(last_five)
             if last_five.count('R') == 5 or last_five.count('L') == 5:
                 current_motion = 'F'
-            
+                predictions_array.append(current_motion)
     else:
         if b'L' in data or b'G' in data:
             current_motion = 'L'
@@ -170,40 +172,44 @@ while on:
         elif b'F' in data:
             current_motion = 'F'
         elif b'B' in data:
-            controller.change_speed(current_speed, p_ena, p_enb)
-            controller.go_backwards()
-            current_motion = ''
+            #controller.change_speed(current_speed, p_ena, p_enb)
+            #controller.go_backwards()
+            current_motion = 'V'
         elif b'S' in data:
-            controller.stop()
             current_motion = ''
-            
-
+            controller.stop()
 
     if current_motion == 'L':
         #camera_step(current_motion)
-        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
+        controller.change_speed(current_speed-6, p_ena, p_enb)
         controller.turn_left()
         wait_time = 0.1
     if current_motion == 'R':
         #camera_step(current_motion)
-        controller.change_speed(current_speed-(6*2), p_ena, p_enb)
+        controller.change_speed(current_speed-6, p_ena, p_enb)
         controller.turn_right()
         wait_time = 0.1
     if current_motion == 'F':
         controller.change_speed(current_speed, p_ena, p_enb)
         controller.go_forwards()
         wait_time = 0.5
+    if current_motion == 'V':
+        controller.stop()
+        wait_time = 0.5
 
+    #if not self_driving:
     sleep(wait_time)
     controller.stop()
 
     if recording and not self_driving:
-            camera_step(current_motion)
+        camera_step(current_motion)
 
+#print(recording)
 client_socket.close()
 server_socket.close()
-
-if recording:
-    np.savez('penny-pi/data/'+str(session_id)+'/data.npz', commands=command_array, ticks=tick_array, speed=speed_array, step_interval=step_array)
+#print(recording)
+if was_recording:
+    print("saving")
+    np.savez('penny-pi/tag-data/'+str(session_id)+'/data.npz', commands=command_array, ticks=tick_array, speed=speed_array, step_interval=step_array)
 
 print("python server closing")
