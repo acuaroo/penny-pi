@@ -132,8 +132,9 @@ while on:
 
         img_array = rawCapture.array
         img_array = img_array.reshape(1, CAMERA_SIZE, CAMERA_SIZE, 3)
+        img_array = img_array / 255
+
         img_array = np.float32(img_array)
-        #img_array = img_array / 255
         
         interpreter.set_tensor(input['index'], img_array)
         interpreter.invoke()
