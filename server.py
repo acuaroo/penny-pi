@@ -16,8 +16,14 @@ DEFAULT_SPEED = 40;
 interpreter = tflite.Interpreter(model_path='penny-pi/machine-learning/car-23-2-4-ta79.tflite')
 interpreter.allocate_tensors()
 
+tag_interpreter = tflite.Interpreter(model_path='penny-pi/machine-learning/car-23-2-12-ta88.tflite')
+tag_interpreter.allocate_tensors()
+
 output = interpreter.get_output_details()[0]
 input = interpreter.get_input_details()[0]
+
+t_output = tag_interpreter.get_output_details()[0]
+t_input = tag_interpreter.get_input_details()[0]
 
 camera = PiCamera()
 camera.resolution = (CAMERA_SIZE, CAMERA_SIZE)
@@ -54,6 +60,7 @@ was_recording = False
 on = True
 self_driving = False
 recording = False
+tag_driving = False
 session_id = "TAG_"+datetime.now().strftime("%Y%m%d%H%M%S")
 
 def camera_step(current_motion):
@@ -127,8 +134,12 @@ while on:
         self_driving = True
     elif b'x' in data:
         self_driving = False
+    elif b'V' in data:
+        tag_driving = True
+    elif b'v' in data:
+        tag_driving = False
 
-    if self_driving:
+    if self_driving or tag_driving:
         rawCapture = PiRGBArray(camera, size=(CAMERA_SIZE, CAMERA_SIZE))
         camera.capture(rawCapture, format="rgb")
 
@@ -136,17 +147,27 @@ while on:
         img_array = img_array.reshape(1, CAMERA_SIZE, CAMERA_SIZE, 3)
         img_array = np.float32(img_array)
         #img_array = img_array / 255
-        
-        interpreter.set_tensor(input['index'], img_array)
-        interpreter.invoke()
+        predictions = []
 
-        predictions = interpreter.get_tensor(output['index'])
+        if self_driving:
+            interpreter.set_tensor(input['index'], img_array)
+            interpreter.invoke()
+            predictions = interpreter.get_tensor(output['index'])
+        elif tag_driving:
+            tag_interpreter.set_tensor(t_input['index'], img_array)
+            tag_interpreter.invoke()
+            predictions = tag_interpreter.get_tensor(t_output['index'])
+
+        #predictions = interpreter.get_tensor(output['index'])
         #np.set_printoptions(precision=2, suppress=True)
         print(predictions)
-        
-        f = interpreter.get_tensor(output['index'])[0][0]
-        l = interpreter.get_tensor(output['index'])[0][1]
-        r = interpreter.get_tensor(output['index'])[0][2]
+        f = predictions[0][0]
+        l = predictions[0][1]
+        r = predictions[0][2]
+        s = 0
+
+        if tag_driving:
+            s = predictions[0][3]
 
         if f > r and f > l:
             current_motion = 'F'
@@ -155,6 +176,10 @@ while on:
         elif l > f and l > r:
             current_motion = 'L'
 
+        if tag_driving:
+            if s > f and s > r and s > l:
+                current_motion = 'V'
+ 
         predictions_array.append(current_motion)
 
         if len(predictions_array) >= 5:
@@ -200,7 +225,7 @@ while on:
     sleep(wait_time)
     controller.stop()
 
-    if recording and not self_driving:
+    if recording and not self_driving and not tag_driving:
         camera_step(current_motion)
 
 #print(recording)
