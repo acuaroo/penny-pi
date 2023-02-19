@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 
-GREEN = 4
-RED = 2
+GREEN = 5
+RED = 4
 YELLOW = 3
 
 def init():

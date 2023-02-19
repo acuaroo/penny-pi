@@ -38,14 +38,14 @@ def gpio_init():
     return (p_ena, p_enb)
 
 def turn_right():
-    lights.green()
+    lights.red()
     GPIO.output(FRONT_LEFT, GPIO.HIGH)
     GPIO.output(REAR_LEFT, GPIO.LOW)
     GPIO.output(FRONT_RIGHT, GPIO.LOW)
     GPIO.output(REAR_RIGHT, GPIO.HIGH)
 
 def turn_left():
-    lights.red()
+    lights.green()
     GPIO.output(FRONT_LEFT, GPIO.LOW)
     GPIO.output(REAR_LEFT, GPIO.HIGH)
     GPIO.output(FRONT_RIGHT, GPIO.HIGH)
