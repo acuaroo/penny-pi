@@ -185,10 +185,11 @@ while on:
  
         predictions_array.append(current_motion)
 
-        if len(predictions_array) >= 5:
-            last_five = predictions_array[(len(predictions_array) - 5):]
-            print(last_five)
-            if last_five.count('R') == 5 or last_five.count('L') == 5:
+        if len(predictions_array) >= 6:
+            last_six = predictions_array[(len(predictions_array) - 6):]
+            print(last_six)
+            if last_six.count('R') == 6 or last_six.count('L') == 6 or \
+                (last_six.count('R') == 3 and last_six.count('L') == 3):
                 current_motion = 'F'
                 predictions_array.append(current_motion)
     else:
