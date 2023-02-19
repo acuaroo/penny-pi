@@ -32,17 +32,17 @@ def light_show():
 
     for i in range(0, 5):
         green()
+        sleep(0.25)
         stop()
-        sleep(0.5)
         yellow()
+        sleep(0.25)
         stop()
-        sleep(0.5)
         red()
+        sleep(0.25)
         stop()
-        sleep(0.5)
         yellow()
+        sleep(0.25)
         stop()
-        sleep(0.5)
 
 def stop_light_show():
     light_show = False
