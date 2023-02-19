@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import lights 
 
 # stops annoying warnings
 GPIO.setwarnings(False)
@@ -12,6 +13,8 @@ ENA = 25
 ENB = 12
 
 current_speed = 40
+
+lights.init()
 
 def change_speed(new_speed, ena, enb):
     current_speed = new_speed
@@ -35,18 +38,21 @@ def gpio_init():
     return (p_ena, p_enb)
 
 def turn_right():
+    lights.green()
     GPIO.output(FRONT_LEFT, GPIO.HIGH)
     GPIO.output(REAR_LEFT, GPIO.LOW)
     GPIO.output(FRONT_RIGHT, GPIO.LOW)
     GPIO.output(REAR_RIGHT, GPIO.HIGH)
 
 def turn_left():
+    lights.red()
     GPIO.output(FRONT_LEFT, GPIO.LOW)
     GPIO.output(REAR_LEFT, GPIO.HIGH)
     GPIO.output(FRONT_RIGHT, GPIO.HIGH)
     GPIO.output(REAR_RIGHT, GPIO.LOW)
 
 def go_forwards():
+    lights.yellow()
     GPIO.output(FRONT_LEFT, GPIO.HIGH)
     GPIO.output(REAR_LEFT, GPIO.LOW)
     GPIO.output(FRONT_RIGHT, GPIO.HIGH)
@@ -59,6 +65,7 @@ def go_backwards():
     GPIO.output(REAR_RIGHT, GPIO.HIGH)
 
 def stop():
+    lights.stop()
     GPIO.output(FRONT_LEFT, GPIO.LOW)
     GPIO.output(REAR_LEFT, GPIO.LOW)
     GPIO.output(FRONT_RIGHT, GPIO.LOW)
