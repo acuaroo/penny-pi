@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+from time import sleep
 
 GREEN = 5
 RED = 4

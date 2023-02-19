@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 import lights 
-from time import sleep
 
 # stops annoying warnings
 GPIO.setwarnings(False)
