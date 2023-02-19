@@ -29,6 +29,8 @@ camera = PiCamera()
 camera.resolution = (CAMERA_SIZE, CAMERA_SIZE)
 camera.rotation = -90
 
+p_ena, p_enb = controller.gpio_init()
+
 server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 server_socket.bind(("", PORT))
 server_socket.listen(PORT)
@@ -39,7 +41,6 @@ client_socket, address = server_socket.accept()
 
 print("python server connected to: "+str(address))
 
-p_ena, p_enb = controller.gpio_init()
 
 p_ena.start(DEFAULT_SPEED)
 p_enb.start(DEFAULT_SPEED)

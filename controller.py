@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import lights 
+from time import sleep
 
 # stops annoying warnings
 GPIO.setwarnings(False)
@@ -22,6 +23,7 @@ def change_speed(new_speed, ena, enb):
     enb.ChangeDutyCycle(new_speed)
 
 def gpio_init():
+    lights.light_show()
     GPIO.setmode(GPIO.BCM)
 
     GPIO.setup(FRONT_LEFT, GPIO.OUT)
@@ -38,20 +40,23 @@ def gpio_init():
     return (p_ena, p_enb)
 
 def turn_right():
-    lights.red()
+    lights.stop_light_show()
+    lights.green()
     GPIO.output(FRONT_LEFT, GPIO.HIGH)
     GPIO.output(REAR_LEFT, GPIO.LOW)
     GPIO.output(FRONT_RIGHT, GPIO.LOW)
     GPIO.output(REAR_RIGHT, GPIO.HIGH)
 
 def turn_left():
-    lights.green()
+    lights.stop_light_show()
+    lights.red()
     GPIO.output(FRONT_LEFT, GPIO.LOW)
     GPIO.output(REAR_LEFT, GPIO.HIGH)
     GPIO.output(FRONT_RIGHT, GPIO.HIGH)
     GPIO.output(REAR_RIGHT, GPIO.LOW)
 
 def go_forwards():
+    lights.stop_light_show()
     lights.yellow()
     GPIO.output(FRONT_LEFT, GPIO.HIGH)
     GPIO.output(REAR_LEFT, GPIO.LOW)
@@ -59,14 +64,19 @@ def go_forwards():
     GPIO.output(REAR_RIGHT, GPIO.LOW)
 
 def go_backwards():
+    lights.stop_light_show()
     GPIO.output(FRONT_LEFT, GPIO.LOW)
     GPIO.output(REAR_LEFT, GPIO.HIGH)
     GPIO.output(FRONT_RIGHT, GPIO.LOW)
     GPIO.output(REAR_RIGHT, GPIO.HIGH)
 
 def stop():
+    lights.stop_light_show()
     lights.stop()
     GPIO.output(FRONT_LEFT, GPIO.LOW)
     GPIO.output(REAR_LEFT, GPIO.LOW)
     GPIO.output(FRONT_RIGHT, GPIO.LOW)
     GPIO.output(REAR_RIGHT, GPIO.LOW)
+
+
+

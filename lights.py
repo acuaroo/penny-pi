@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 GREEN = 5
 RED = 4
 YELLOW = 3
+light_show = False 
 
 def init():
     GPIO.setmode(GPIO.BCM)
@@ -23,3 +24,18 @@ def stop():
     GPIO.output(GREEN, GPIO.LOW)
     GPIO.output(RED, GPIO.LOW)
     GPIO.output(YELLOW, GPIO.LOW)
+
+def light_show():
+    light_show = True
+    while light_show:
+        lights.green()
+        sleep(0.5)
+        lights.yellow()
+        sleep(0.5)
+        lights.red()
+        sleep(0.5)
+        lights.yellow()
+        sleep(0.5)
+
+def stop_light_show():
+    light_show = False
