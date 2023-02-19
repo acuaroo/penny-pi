@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 from time import sleep
+import multiprocessing
 
 GREEN = 5
 RED = 4
@@ -28,15 +29,21 @@ def stop():
 
 def light_show():
     light_show = True
-    while light_show:
+    stop()
+    
+    for i in range(0, 5):
         green()
-        sleep(0.5)
+        stop()
+        sleep(0.25)
         yellow()
-        sleep(0.5)
+        stop()
+        sleep(0.25)
         red()
-        sleep(0.5)
+        stop()
+        sleep(0.25)
         yellow()
-        sleep(0.5)
+        stop()
+        sleep(0.25)
 
 def stop_light_show():
     light_show = False
