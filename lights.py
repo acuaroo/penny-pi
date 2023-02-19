@@ -28,13 +28,13 @@ def stop():
 def light_show():
     light_show = True
     while light_show:
-        lights.green()
+        green()
         sleep(0.5)
-        lights.yellow()
+        yellow()
         sleep(0.5)
-        lights.red()
+        red()
         sleep(0.5)
-        lights.yellow()
+        yellow()
         sleep(0.5)
 
 def stop_light_show():
