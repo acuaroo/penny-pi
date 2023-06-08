@@ -21,7 +21,7 @@
 | Self Driving  | ✅  |
 | Obstacle Avoidance  | ❌ |
 | Cat Detection  | 🟡 |
-| Tag Following  | ❌ |
+| Tag Following  | 🟡 |
 
 ## hardware
 
