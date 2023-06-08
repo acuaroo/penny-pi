@@ -1,3 +1,15 @@
+'''
+disclaimer! 
+
+this code is kinda crappy, as when i originally wrote it, it only performed a small task
+and was simple for it's architecture. if i were to re-do this, i would change and refactor this
+a ton, so please be warry!
+
+finally, this was written using a mix of nano and vscode, so there are some random hanging characters
+and weird tab spacing issues.
+'''
+
+
 from picamera import PiCamera 
 from picamera.array import PiRGBArray
 from time import sleep
